@@ -1,9 +1,18 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { computed, Injectable, signal } from '@angular/core';
+import {
+  computed,
+  DestroyRef,
+  inject,
+  Injectable,
+  Injector,
+  INJECTOR,
+  signal,
+} from '@angular/core';
 import { JokeApiUtil } from '../../utils/joke-api/joke-api.util';
 import { catchError, tap } from 'rxjs/operators';
 import { Joke } from '../../models/joke.model';
 import { EMPTY } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 interface State {
   joke: Joke | null;
@@ -15,6 +24,7 @@ interface State {
 @Injectable({ providedIn: 'root' })
 export class JokeStoreService {
   #jokeApi = JokeApiUtil();
+  #destroyRef = inject(DestroyRef);
 
   constructor() {
     this.loadJoke();
@@ -33,28 +43,32 @@ export class JokeStoreService {
   loaded = computed(() => this.#state().loaded);
 
   loadJoke() {
-    this.#state.update(state => ({...state,  loading: true }));
+    this.#state.update((state) => ({ ...state, loading: true }));
 
-    this.#jokeApi.getRandomJoke().pipe(
-      tap({
-        next: (joke) => {
-          this.#state.set({
-            joke,
-            error: null,
-            loading: false,
-            loaded: true,
-          });
-        },
-        error: (error) => {
-          this.#state.set({
-            joke: null,
-            error,
-            loading: false,
-            loaded: true,
-          });
-        },
-      }),
-      catchError(() => EMPTY),
-    ).subscribe();
+    this.#jokeApi
+      .getRandomJoke()
+      .pipe(
+        tap({
+          next: (joke) => {
+            this.#state.set({
+              joke,
+              error: null,
+              loading: false,
+              loaded: true,
+            });
+          },
+          error: (error) => {
+            this.#state.set({
+              joke: null,
+              error,
+              loading: false,
+              loaded: true,
+            });
+          },
+        }),
+        catchError(() => EMPTY),
+        takeUntilDestroyed(this.#destroyRef)
+      )
+      .subscribe();
   }
 }
