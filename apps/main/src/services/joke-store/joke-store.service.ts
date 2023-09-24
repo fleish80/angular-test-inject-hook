@@ -32,15 +32,8 @@ export class JokeStoreService {
   loading = computed(() => this.#state().loading);
   loaded = computed(() => this.#state());
 
-  patch(partialState: Partial<State>) {
-    this.#state.update((state) => ({
-      ...state,
-      ...partialState,
-    }));
-  }
-
   loadJoke() {
-    this.patch({ loading: true });
+    this.#state.update(state => ({...state,  loading: true }));
 
     this.#jokeApi.getRandomJoke().pipe(
       tap({
@@ -61,7 +54,7 @@ export class JokeStoreService {
           });
         },
       }),
-      catchError(() => EMPTY)
+      catchError(() => EMPTY),
     ).subscribe();
   }
 }
