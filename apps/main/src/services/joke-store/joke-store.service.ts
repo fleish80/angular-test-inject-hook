@@ -30,7 +30,7 @@ export class JokeStoreService {
   joke = computed(() => this.#state().joke);
   error = computed(() => this.#state().error);
   loading = computed(() => this.#state().loading);
-  loaded = computed(() => this.#state());
+  loaded = computed(() => this.#state().loaded);
 
   loadJoke() {
     this.#state.update(state => ({...state,  loading: true }));
