@@ -1,18 +1,16 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import {
-  computed,
-  DestroyRef,
-  inject,
-  Injectable,
-  Injector,
-  INJECTOR,
-  signal,
+    computed,
+    DestroyRef,
+    inject,
+    Injectable,
+    signal
 } from '@angular/core';
-import { JokeApiUtil } from '../../utils/joke-api/joke-api.util';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { EMPTY } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Joke } from '../../models/joke.model';
-import { EMPTY } from 'rxjs';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { JokeApiUtil } from '../../utils/joke-api/joke-api.util';
 
 interface State {
   joke: Joke | null;
