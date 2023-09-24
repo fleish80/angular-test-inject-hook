@@ -3,6 +3,9 @@ import { HttpClientTestingModule, HttpTestingController } from '@angular/common/
 import { TestBed } from '@angular/core/testing';
 import { Joke } from '../../models/joke.model';
 
+
+export class MockService {}
+
 describe('JokeApiUtil', () => {
   let httpTestingController: HttpTestingController;
   let jokeApiUtil: () => Promise<Joke>;
