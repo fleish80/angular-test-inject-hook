@@ -4,7 +4,7 @@ import { Joke } from '../../models/joke.model';
 
 export const JOKE_URL = 'https://api.chucknorris.io/jokes/random';
 
-export function JokeApiUtil() {
+export function useJokeApi() {
   
   const httpClient = inject(HttpClient);
 

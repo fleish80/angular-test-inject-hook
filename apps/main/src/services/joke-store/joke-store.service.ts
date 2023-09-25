@@ -10,7 +10,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { EMPTY } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { Joke } from '../../models/joke.model';
-import { JokeApiUtil } from '../../utils/joke-api/joke-api.util';
+import { useJokeApi } from '../../utils/use-joke-api/use-joke-api.util';
 
 interface State {
   joke: Joke | null;
@@ -21,7 +21,7 @@ interface State {
 
 @Injectable({ providedIn: 'root' })
 export class JokeStoreService {
-  #jokeApi = JokeApiUtil();
+  #useJokeApi = useJokeApi();
   #destroyRef = inject(DestroyRef);
 
   constructor() {
@@ -43,7 +43,7 @@ export class JokeStoreService {
   loadJoke() {
     this.#state.update((state) => ({ ...state, loading: true }));
 
-    this.#jokeApi
+    this.#useJokeApi
       .getRandomJoke()
       .pipe(
         tap({
