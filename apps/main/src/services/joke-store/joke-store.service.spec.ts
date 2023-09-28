@@ -1,23 +1,40 @@
 import { TestBed } from '@angular/core/testing';
 import { JokeStoreService } from './joke-store.service';
-import { useJokeApi } from '../../utils/use-joke-api/use-joke-api.util';
+import * as useJokeApiUtil from '../../utils/use-joke-api/use-joke-api.util';
+import { of, throwError } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 
 describe('JokeStoreService', () => {
   let service: JokeStoreService;
-  let useJokeApiSpy: jest.SpyInstance;
-
+  const getRandomJokeSpy = jest.fn();
+  jest.spyOn(useJokeApiUtil, 'useJokeApi').mockReturnValue({getRandomJoke: getRandomJokeSpy});
 
   beforeEach(() => {
-    useJokeApiSpy = jest.spyOn(useJokeApi(), 'getRandomJoke');
     TestBed.configureTestingModule({});
-    service = TestBed.inject(JokeStoreService);
   });
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
+  it('should set joke succesfully', () => {
+    getRandomJokeSpy.mockReturnValue(of({value: 'Chuck Norris doesn\'t do push-ups. He pushes the Earth down'}));
+    service = TestBed.inject(JokeStoreService);
+
+    expect(service.joke()).toEqual({value: 'Chuck Norris doesn\'t do push-ups. He pushes the Earth down'});
+    expect(service.loading()).toBe(false);
+    expect(service.loaded()).toBe(true);
+    expect(service.error()).toBeNull();
+  });
+
+  it('should not set joke because the api error', () => {
+    const error = new HttpErrorResponse({statusText: 'Bad request', status: 500});
+    getRandomJokeSpy.mockReturnValue(throwError(() => error));
+    service = TestBed.inject(JokeStoreService);
+
+    expect(service.joke()).toBeNull();
+    expect(service.loading()).toBe(false);
+    expect(service.loaded()).toBe(true);
+    expect(service.error()).toEqual(error);
   });
 });

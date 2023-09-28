@@ -4,6 +4,7 @@ import {
     DestroyRef,
     inject,
     Injectable,
+    Injector,
     signal
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -23,6 +24,7 @@ interface State {
 export class JokeStoreService {
   #useJokeApi = useJokeApi();
   #destroyRef = inject(DestroyRef);
+  #injector = inject(Injector);
 
   constructor() {
     this.loadJoke();
