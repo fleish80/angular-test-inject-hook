@@ -76,7 +76,7 @@ describe('AppComponent', () => {
     expect(paragraphElms[0].nativeElement.textContent).toBe('Http failure response for (unknown url): 500 Bad Request');
   });
 
-  it('should reload anothe joke', () => {
+  it('should reload another joke', () => {
     loaded.set(true);
     loading.set(false);
     joke.set({value: 'Chuck Norris’ trash throws itself out'});
