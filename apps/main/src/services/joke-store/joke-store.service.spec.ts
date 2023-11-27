@@ -18,10 +18,10 @@ describe('JokeStoreService', () => {
   });
 
   it('should set joke succesfully', () => {
-    getRandomJokeSpy.mockReturnValue(of({value: 'Chuck Norris doesn\'t do push-ups. He pushes the Earth down'}));
+    getRandomJokeSpy.mockReturnValue(of({value: 'Chuck Norris can kill two stones with one bird'}));
     service = TestBed.inject(JokeStoreService);
 
-    expect(service.joke()).toEqual({value: 'Chuck Norris doesn\'t do push-ups. He pushes the Earth down'});
+    expect(service.joke()).toEqual({value: 'Chuck Norris can kill two stones with one bird'});
     expect(service.loading()).toBe(false);
     expect(service.loaded()).toBe(true);
     expect(service.error()).toBeNull();

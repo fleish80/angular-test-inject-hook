@@ -5,7 +5,6 @@ import { Joke } from '../../models/joke.model';
 import { provideHttpClient } from '@angular/common/http';
 import { take } from 'rxjs/operators';
 
-
 export class MockService {
   useJokeApiUtil = useJokeApi();
 }
@@ -27,7 +26,7 @@ describe('useJokeApiUtil', () => {
     httpTestingController.verify();
   });
 
-  it('should return a joke', (done) => {
+  it('should return a joke successfully', (done) => {
     const mockJoke: Joke = {
       value: 'Chuck Norris can divide by zero.',
     };
@@ -36,7 +35,7 @@ describe('useJokeApiUtil', () => {
     .subscribe(joke => {
       expect(joke).toEqual(mockJoke);
       done();
-    })
+    });
 
     const req = httpTestingController.expectOne(JOKE_URL);
     expect(req.request.method).toEqual('GET');
